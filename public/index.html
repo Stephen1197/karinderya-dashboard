@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karinderya Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div>
+        <h1>Karinderya Dashboard</h1>
+        <p>Manage your daily menu and stock</p>
+      </div>
+      <p class="today" id="today"></p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Connection / error banner -->
+    <div class="banner" id="banner" role="alert" hidden>
+      <span id="bannerText"></span>
+      <button type="button" class="btn small" id="retryBtn">Try again</button>
+    </div>
+
+    <!-- Summary -->
+    <section class="stats" aria-label="Summary">
+      <div class="stat">
+        <span class="stat-label">Dishes on the menu</span>
+        <strong id="statDishes">0</strong>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Servings in stock</span>
+        <strong id="statStock">0</strong>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Average price</span>
+        <strong id="statPrice">₱0.00</strong>
+      </div>
+      <div class="stat" id="statLowWrap">
+        <span class="stat-label">Running low (5 or fewer)</span>
+        <strong id="statLow">0</strong>
+      </div>
+    </section>
+
+    <!-- Menu table -->
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Menu</h2>
+          <p class="muted" id="menuCount"></p>
+        </div>
+        <div class="actions">
+          <input type="search" id="search" placeholder="Search dish or category" aria-label="Search dishes" />
+          <button type="button" class="btn primary" id="addBtn">Add dish</button>
+        </div>
+      </div>
+
+      <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Dish</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th class="right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <div id="emptyMsg" class="empty" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add / Edit dish -->
+  <div class="overlay" id="overlay" hidden>
+    <form class="modal" id="dishForm" role="dialog" aria-modal="true" aria-labelledby="modalTitle" novalidate>
+      <h3 id="modalTitle">Add dish</h3>
+
+      <input type="hidden" id="dishId" />
+
+      <label>Dish name
+        <input type="text" id="name" maxlength="80" autocomplete="off" required />
+      </label>
+
+      <label>Category
+        <select id="category" required>
+          <option value="Ulam">Ulam</option>
+          <option value="Pansit">Pansit</option>
+          <option value="Kanin">Kanin</option>
+          <option value="Panghimagas">Panghimagas</option>
+          <option value="Inumin">Inumin</option>
+        </select>
+      </label>
+
+      <div class="row">
+        <label>Price (₱)
+          <input type="number" id="price" min="0" step="0.01" inputmode="decimal" required />
+        </label>
+        <label>Stock
+          <input type="number" id="stock" min="0" step="1" inputmode="numeric" required />
+        </label>
+      </div>
+
+      <p class="error" id="formError" role="alert" hidden></p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn primary" id="saveBtn">Save dish</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Delete confirmation -->
+  <div class="overlay" id="confirmOverlay" hidden>
+    <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
+      <h3 id="confirmTitle">Delete this dish?</h3>
+      <p class="muted" id="confirmText"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="confirmCancel">Keep dish</button>
+        <button type="button" class="btn danger-solid" id="confirmDelete">Delete dish</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
